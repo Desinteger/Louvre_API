@@ -11,16 +11,15 @@ import static java.net.HttpURLConnection.HTTP_OK;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNull.notNullValue;
 
-@DisplayName("Тесты: создание заказа")
-public class CreateOrderTest extends BasicTest {
+@DisplayName("Тесты: заказ")
+public class OrderTest extends BasicTest {
         OrderActions orderActions = new OrderActions();
         OrderGenerator generator = new OrderGenerator();
         String orderId;
         @After
         public void deleteOrderAfterTest() { orderActions.deleteOrderById(orderId); }
-
+        @DisplayName("Тест: Создание заказа")
         @Test
-        @DisplayName("Создание заказа")
         public void testOrderCreating() {
             Order order = generator.random();
             ValidatableResponse response = orderActions.createOrder(order);
@@ -31,9 +30,8 @@ public class CreateOrderTest extends BasicTest {
                     .and()
                     .body("_id", notNullValue());
         }
-
+        @DisplayName("Тест: Получение заказа по id")
         @Test
-        @DisplayName("Получение заказа по id")
         public void testGetOrderById() {
             Order order = generator.random();
             ValidatableResponse createResponse = orderActions.createOrder(order);
@@ -48,5 +46,19 @@ public class CreateOrderTest extends BasicTest {
                     .statusCode(HTTP_OK)
                     .and()
                     .body("_id", equalTo(orderId));
+    }
+
+    @DisplayName("Тест: обновление данных о заказе")
+    @Test
+    public void testUpdatingOrderData() {
+        Order order = generator.generic();
+        ValidatableResponse createResponse = orderActions.createOrder(order);
+        String orderId = createResponse.extract().path("_id");
+
+        ValidatableResponse updateResponse = orderActions.updateOrderData(orderId, TestData.updatedOrder);
+
+        updateResponse.assertThat()
+                .statusCode(equalTo(HTTP_OK))
+                .body("modifiedCount", equalTo(TestData.modifiedCount));
     }
 }

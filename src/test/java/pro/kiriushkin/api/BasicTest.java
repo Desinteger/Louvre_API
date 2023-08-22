@@ -1,4 +1,4 @@
-package ru.yandex.praktikum;
+package pro.kiriushkin.api;
 import io.restassured.RestAssured;
 import org.junit.Before;
 

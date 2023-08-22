@@ -1,4 +1,4 @@
-package ru.yandex.praktikum;
+package pro.kiriushkin.api;
 
 public class Order {
     private String type;
@@ -10,6 +10,7 @@ public class Order {
 
     public Order(String type, Amount amount, String date, String name, String email, String phone){
         this.type = type;
+        this.amount = amount;
         this.date = date;
         this.name = name;
         this.email = email;
@@ -65,7 +66,4 @@ public class Order {
     public void setAmount(Amount amount) {
         this.amount = amount;
     }
-
-
-
 }

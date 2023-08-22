@@ -1,26 +1,35 @@
-package ru.yandex.praktikum;
+package pro.kiriushkin.api;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 
-public class OrderActions {
+public class OrderActions extends BaseClient {
+
+    private String id;
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private static final String ORDER_PATH = "/orders";
+    private String generateOrderIDPath(String id) {
+        return ORDER_PATH + "/" + id;
+    }
 
     @Step("Создание заказа")
     public ValidatableResponse createOrder(Order order) {
-        return given()
-                .log().all()
+        ValidatableResponse response = given()
                 .header("Content-type", "application/json")
                 .body(order)
                 .when()
                 .post(ORDER_PATH)
                 .then().log().all();
+        id = response.extract().path("_id");
+        return response;
     }
 
     @Step("Получение списка всех заказов")
     public ValidatableResponse getOrders() {
         return given()
-                .log().all()
                 .header("Content-type", "application/json")
                 .when()
                 .get(ORDER_PATH)
@@ -28,24 +37,35 @@ public class OrderActions {
     }
 
     @Step("Получение заказа по id")
-    public void getOrderById(int id) {
+    public void getOrderById(String orderId) {
+        String orderPathWithID = generateOrderIDPath(orderId);
         given()
+                .header("Content-type", "application/json")
+                .when()
+                .get(orderPathWithID)
+                .then().log().all();
+    }
+
+    @Step("Обновление данных о заказе")
+    public ValidatableResponse updateOrderData(String orderId, Order updatedOrder) {
+        String orderPathWithID = generateOrderIDPath(orderId);
+        ValidatableResponse response = given()
                 .log().all()
                 .header("Content-type", "application/json")
-                .queryParam("id", id).
-                when().
-                get(ORDER_PATH).
-                then().log().all();
+                .body(updatedOrder)
+                .when()
+                .patch(orderPathWithID)
+                .then().log().all();
+        return response;
     }
 
     @Step("Удаление заказа по id")
-    public void deleteOrderById(int id){
-        given()
-                .log().all()
-                .header("Content-type", "application/json")
-                .queryParam("id", id)
+    public ValidatableResponse deleteOrderById(String id){
+        String orderPathWithID = generateOrderIDPath(id);
+        ValidatableResponse response = given()
                 .when()
-                .delete(ORDER_PATH)
+                .delete(orderPathWithID)
                 .then().log().all();
+        return response;
     }
 }

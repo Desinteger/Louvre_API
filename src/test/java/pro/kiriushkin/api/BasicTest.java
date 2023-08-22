@@ -6,6 +6,6 @@ public class BasicTest {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI= "https://qa-scooter.praktikum-services.ru";
+        RestAssured.baseURI= "https://api.kiriushkin.pro/louvre-api";
     }
 }

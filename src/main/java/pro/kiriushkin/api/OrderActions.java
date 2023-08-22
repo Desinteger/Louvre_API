@@ -4,8 +4,7 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 
 public class OrderActions {
-    private static final String CREATE_ORDER_PATH = "/api/v1/orders";
-    private static final String CANCEL_ORDER_PATH = "/api/v1/orders/cancel";
+    private static final String ORDER_PATH = "/orders";
 
     @Step("Создание заказа")
     public ValidatableResponse createOrder(Order order) {
@@ -14,7 +13,7 @@ public class OrderActions {
                 .header("Content-type", "application/json")
                 .body(order)
                 .when()
-                .post(CREATE_ORDER_PATH)
+                .post(ORDER_PATH)
                 .then().log().all();
     }
 
@@ -24,18 +23,29 @@ public class OrderActions {
                 .log().all()
                 .header("Content-type", "application/json")
                 .when()
-                .get(CREATE_ORDER_PATH)
+                .get(ORDER_PATH)
                 .then().log().all();
     }
 
-    @Step("Отмена заказа по трек-номеру")
-    public void cancelOrder(int trackNumber) {
+    @Step("Получение заказа по id")
+    public void getOrderById(int id) {
         given()
                 .log().all()
                 .header("Content-type", "application/json")
-                .queryParam("track", trackNumber).
+                .queryParam("id", id).
                 when().
-                put(CANCEL_ORDER_PATH).
+                get(ORDER_PATH).
                 then().log().all();
+    }
+
+    @Step("Удаление заказа по id")
+    public void deleteOrderById(int id){
+        given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .queryParam("id", id)
+                .when()
+                .delete(ORDER_PATH)
+                .then().log().all();
     }
 }

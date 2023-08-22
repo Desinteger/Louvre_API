@@ -18,6 +18,7 @@ public class OrderTest extends BasicTest {
         String orderId;
         @After
         public void deleteOrderAfterTest() { orderActions.deleteOrderById(orderId); }
+
         @DisplayName("Тест: Создание заказа")
         @Test
         public void testOrderCreating() {
@@ -30,6 +31,7 @@ public class OrderTest extends BasicTest {
                     .and()
                     .body("_id", notNullValue());
         }
+
         @DisplayName("Тест: Получение заказа по id")
         @Test
         public void testGetOrderById() {

@@ -1,6 +1,5 @@
 package pro.kiriushkin.api;
 
-import org.junit.After;
 import org.junit.Test;
 import io.restassured.response.ValidatableResponse;
 import static org.hamcrest.Matchers.*;

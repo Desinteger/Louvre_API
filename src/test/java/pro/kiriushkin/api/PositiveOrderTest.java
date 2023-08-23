@@ -1,5 +1,6 @@
 package pro.kiriushkin.api;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
 import io.qameta.allure.junit4.DisplayName;
@@ -15,8 +16,18 @@ public class PositiveOrderTest extends BasicTest {
         OrderActions orderActions = new OrderActions();
         OrderGenerator generator = new OrderGenerator();
         String orderId;
+
+        @Before
+            public void createOrderAndGetOrderId() {
+               Order order = generator.random();
+               ValidatableResponse response = orderActions.createOrder(order);
+               orderId = response.extract().path("_id");
+        }
+
+
         @After
         public void deleteOrderAfterTest() { orderActions.deleteOrderById(orderId); }
+
 
         @DisplayName("Тест: Создание заказа")
         @Test
@@ -33,27 +44,18 @@ public class PositiveOrderTest extends BasicTest {
         @DisplayName("Тест: Получение заказа по id")
         @Test
         public void testGetOrderById() {
-            Order order = generator.random();
-            ValidatableResponse createResponse = orderActions.createOrder(order);
-            orderId = createResponse.extract().path("_id");
-
             orderActions.getOrderById(orderId);
 
             given()
                     .get("/orders/" + orderId)
                     .then()
                     .statusCode(HTTP_OK)
-                    .and()
                     .body("_id", equalTo(orderId));
     }
 
     @DisplayName("Тест: обновление данных о заказе")
     @Test
     public void testUpdatingOrderData() {
-        Order order = generator.generic();
-        ValidatableResponse createResponse = orderActions.createOrder(order);
-        orderId = createResponse.extract().path("_id");
-
         ValidatableResponse updateResponse = orderActions.updateOrderData(orderId, TestData.updatedOrder);
 
         updateResponse.assertThat()
@@ -64,10 +66,6 @@ public class PositiveOrderTest extends BasicTest {
     @DisplayName("Тест: удаление заказа по id")
     @Test
     public void testDeletingOrderById(){
-            Order order = generator.random();
-            ValidatableResponse createResponse = orderActions.createOrder(order);
-            orderId = createResponse.extract().path("_id");
-
             ValidatableResponse deleteResponse = orderActions.deleteOrderById(orderId);
             deleteResponse.assertThat()
                 .statusCode(equalTo(HTTP_OK))

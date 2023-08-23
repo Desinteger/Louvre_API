@@ -22,7 +22,6 @@ public class NegativeOrderTest extends BasicTest {
 
         response.assertThat()
                 .statusCode(HTTP_BAD_REQUEST)
-                .and()
                 .body("message[0]", equalTo(TestData.MESSAGE_INVALID_EMAIL));
     }
 
@@ -35,7 +34,6 @@ public class NegativeOrderTest extends BasicTest {
 
         response.assertThat()
                 .statusCode(HTTP_BAD_REQUEST)
-                .and()
                 .body("message[0]", equalTo(TestData.MESSAGE_INVALID_PHONE));
     }
 
@@ -48,7 +46,6 @@ public class NegativeOrderTest extends BasicTest {
 
         response.assertThat()
                 .statusCode(HTTP_INTERNAL_ERROR)
-                .and()
                 .body("message", equalTo(TestData.MESSAGE_SERVER_ERROR));
     }
 
@@ -61,7 +58,6 @@ public class NegativeOrderTest extends BasicTest {
 
         response.assertThat()
                 .statusCode(HTTP_BAD_REQUEST)
-                .and()
                 .body("message[0]", equalTo(TestData.MESSAGE_INVALID_TYPE));
     }
 
@@ -74,7 +70,6 @@ public class NegativeOrderTest extends BasicTest {
 
         response.assertThat()
                 .statusCode(HTTP_BAD_REQUEST)
-                .and()
                 .body("message[0]", equalTo(TestData.MESSAGE_INVALID_DATE));
     }
 }

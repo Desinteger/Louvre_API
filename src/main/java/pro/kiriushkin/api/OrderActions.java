@@ -5,9 +5,9 @@ import static io.restassured.RestAssured.given;
 
 public class OrderActions extends BaseClient {
 
-    private String id;
-    public void setId(String id) {
-        this.id = id;
+    private String orderId;
+    public void setId(String orderId) {
+        this.orderId = orderId;
     }
 
     private static final String ORDER_PATH = "/orders";
@@ -23,15 +23,13 @@ public class OrderActions extends BaseClient {
                 .when()
                 .post(ORDER_PATH)
                 .then().log().all();
-        id = response.extract().path("_id");
+        orderId = response.extract().path("_id");
         return response;
     }
 
     @Step("Получение списка всех заказов")
     public ValidatableResponse getOrders() {
         return given()
-                .header("Content-type", "application/json")
-                .when()
                 .get(ORDER_PATH)
                 .then().log().all();
     }
@@ -50,7 +48,6 @@ public class OrderActions extends BaseClient {
     public ValidatableResponse updateOrderData(String orderId, Order updatedOrder) {
         String orderPathWithID = generateOrderIDPath(orderId);
         ValidatableResponse response = given()
-                .log().all()
                 .header("Content-type", "application/json")
                 .body(updatedOrder)
                 .when()

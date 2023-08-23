@@ -9,10 +9,9 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 import static java.net.HttpURLConnection.*;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
 
-@DisplayName("Позитивные тесты: заказ")
-public class PositiveOrderTest extends BasicTest {
+@DisplayName("Тесты: действия с существующим заказом")
+public class OrderMethodsTest extends BasicTest {
         OrderActions orderActions = new OrderActions();
         OrderGenerator generator = new OrderGenerator();
         String orderId;
@@ -24,22 +23,8 @@ public class PositiveOrderTest extends BasicTest {
                orderId = response.extract().path("_id");
         }
 
-
         @After
         public void deleteOrderAfterTest() { orderActions.deleteOrderById(orderId); }
-
-
-        @DisplayName("Тест: Создание заказа")
-        @Test
-        public void testOrderCreating() {
-            Order order = generator.random();
-            ValidatableResponse response = orderActions.createOrder(order);
-            orderId = response.extract().path("_id");
-
-            response.assertThat()
-                    .statusCode(HTTP_CREATED)
-                    .body("_id", notNullValue());
-        }
 
         @DisplayName("Тест: Получение заказа по id")
         @Test

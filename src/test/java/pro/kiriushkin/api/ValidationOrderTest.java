@@ -8,8 +8,8 @@ import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
 import static org.hamcrest.core.IsEqual.equalTo;
 
-@DisplayName("Негативные тесты: заказ")
-public class NegativeOrderTest extends BasicTest {
+@DisplayName("Негативные тесты: валидация при создании заказа")
+public class ValidationOrderTest extends BasicTest {
     OrderActions orderActions = new OrderActions();
     OrderGenerator generator = new OrderGenerator();
 

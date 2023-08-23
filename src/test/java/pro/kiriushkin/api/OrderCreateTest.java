@@ -22,6 +22,7 @@ public class OrderCreateTest extends BasicTest {
     public void testOrderCreating() {
         Order order = generator.random();
         ValidatableResponse response = orderActions.createOrder(order);
+        orderId = response.extract().path("_id");
 
         response.assertThat()
                 .statusCode(HTTP_CREATED)
